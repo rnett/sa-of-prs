@@ -19,7 +19,7 @@ else:
     # TODO set this for other users
     data_dir = None
 
-
+# result should be iterable
 def load():
     with lzma.open("review_comments.csv.xz") as archf:
         return csv.DictReader(codecs.getreader("utf-8")(archf))
