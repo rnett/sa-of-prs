@@ -10,7 +10,7 @@ else:
     pass
 
 if user == 'jimne' or user == 'rnett':
-    data_dir = Path("E:\\autociter")
+    data_dir = Path("E:\\508")
 elif user == 'JNett':
     data_dir = Path(
         "C:\\Users\\JNett\\Common\\Desktop\\Other "
@@ -19,7 +19,12 @@ else:
     # TODO set this for other users
     data_dir = None
 
+data_file = data_dir / "review_comments.csv.xz"
+
+prs_file = data_dir / "prs.pickle.gz"
+
+
 # result should be iterable
 def load():
-    with lzma.open("review_comments.csv.xz") as archf:
-        return csv.DictReader(codecs.getreader("utf-8")(archf))
+    archf = lzma.open(data_file)
+    return csv.DictReader(codecs.getreader("utf-8")(archf))

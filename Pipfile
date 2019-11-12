@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 numpy = "*"
 pandas = "*"
+tqdm = "*"
+#jupyter = "*"
 jupyter = "*"
 
 [requires]
