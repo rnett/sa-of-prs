@@ -10,17 +10,16 @@ from typing import List, Tuple
 if platform.system() == "Windows":
     user = str(Path("~").expanduser()).split("\\")[-1]
 else:
-    pass
+    user = str(Path("~").expanduser()).split("/")[-1]
 
 if user == 'jimne' or user == 'rnett':
     data_dir = Path("E:\\508")
 elif user == 'JNett':
     data_dir = Path(
         "C:\\Users\\JNett\\Common\\Desktop\\Other "
-        "Stuff\\review_comments.csv.xz")
+        "Stuff\\508")
 else:
-    # TODO set this for other users
-    data_dir = None
+    raise ValueError(f"User {user} not recognized.  Add to the data.py file.")
 
 data_file = data_dir / "review_comments.csv.xz"
 
