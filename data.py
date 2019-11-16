@@ -28,6 +28,7 @@ data_file = data_dir / "review_comments.csv.xz"
 prs_file = data_dir / "prs.pickle.gz"
 prs_dir = data_dir / "prs"
 
+prs_obj_file = data_dir / "prs_objects.pickle.gz"
 
 # result should be iterable
 def load():
@@ -54,7 +55,7 @@ def github_api(url):
             continue
 
     if text is None:
-        raise ValueError("No apps worked")
+        raise ValueError("No apps worked for url: " + url)
 
     return json.loads(text)
 
