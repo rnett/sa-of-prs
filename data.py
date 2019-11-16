@@ -1,9 +1,11 @@
 import codecs
 import csv
 import gzip
+import json
 import lzma
 import pickle
 import platform
+import urllib.request
 from pathlib import Path
 from typing import List, Tuple
 
@@ -33,15 +35,42 @@ def load():
     return csv.DictReader(codecs.getreader("utf-8")(archf))
 
 
+apps = [
+    ("f98835efcec776b42a9c", "a73806fc946ced540c208be4320839ecb61c65d5"),
+    ("cd2d170e5bdde6a9ec8c", "f10e1d699134140e5735964caf7f915da6ca88ef")
+]
+
+
+def github_api(url):
+    text = None
+    for app in apps:
+        unauth = f"?client_id={app[0]}&client_secret={app[1]}"
+
+        try:
+            with urllib.request.urlopen(url + unauth) as api_call:
+                text = api_call.read().decode()
+                break
+        except Exception:
+            continue
+
+    if text is None:
+        raise ValueError("No apps worked")
+
+    return json.loads(text)
+
+
 class PR:
-    def __init__(self, repo: str, pr_number: int, issue_comments: List[Tuple[int, str]],
-                 review_comments: List[Tuple[int, str]]):
+    def __init__(self, repo: str, pr_number: int, merged: bool, issue_comments: List[Tuple[str, str]],
+                 review_comments: List[Tuple[str, str]]):
         """
-        issue_comments and review_comments's first item should be time or order
+        issue_comments and review_comments's first item should be time or order.
+        Comments will be sorted by ascending first param.
         """
 
         self.repo = repo.strip('/')
         self.pr_number = pr_number
+
+        self.merged = merged
 
         self.issue_comments = [x[1] for x in issue_comments]
         self.review_comments = [x[1] for x in review_comments]
@@ -78,8 +107,23 @@ class PR:
 
     @staticmethod
     def create_from_api(repo: str, pr_number: int):
-        # TODO
-        raise NotImplementedError
+
+        dummy = PR(repo, pr_number, True, [], [])
+
+        info = github_api(dummy.api_url)
+        merged = info['merged']
+
+        if info['state'] != 'closed':
+            raise ValueError("PR is still open")
+
+        issue_comments = github_api(dummy.issue_comments_api_url)
+        issue_comments = [(c['created_at'], c['body']) for c in issue_comments]
+
+        review_comments = github_api(dummy.review_comments_api_url)
+        review_comments = [(c['created_at'], c['body']) for c in review_comments]
+
+        pr = PR(repo, pr_number, merged, issue_comments, review_comments)
+        return pr
 
     def save(self, force: bool = False):
         file = prs_dir / (self.id + ".pickle.gz")
