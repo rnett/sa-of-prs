@@ -20,6 +20,9 @@ elif user == 'JNett':
     data_dir = Path(
         "C:\\Users\\JNett\\Common\\Desktop\\Other "
         "Stuff\\508")
+elif user == 'brianishii':
+    data_dir = Path(
+        "/Users/brianishii/Documents/Cal_Poly/classes/senior/fall/csc508/")
 else:
     raise ValueError(f"User {user} not recognized.  Add to the data.py file.")
 
@@ -29,7 +32,6 @@ prs_file = data_dir / "prs.pickle.gz"
 prs_dir = data_dir / "prs"
 
 prs_obj_file = data_dir / "prs_objects.pickle.gz"
-
 # result should be iterable
 def load():
     archf = lzma.open(data_file)
