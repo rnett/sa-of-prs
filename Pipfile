@@ -9,6 +9,7 @@ verify_ssl = true
 numpy = "*"
 pandas = "*"
 tqdm = "*"
+langdetect = "*"
 jupyter = "*"
 
 [requires]
