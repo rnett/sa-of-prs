@@ -8,15 +8,20 @@ from sklearn.model_selection import train_test_split
 
 def log_reg(filename):
     data = pandas.read_csv(filename,
-                           usecols=['max_pos', 'max_neg'])
+                           usecols=['sum_pos', 'sum_neg', 'min_neg', 'max_pos', 'num_comments'])
+
+    data['sum_pos'] /= data['num_comments']
+    data['sum_neg'] /= data['num_comments']
+
     merged = pandas.read_csv(filename, usecols=['merged'], squeeze=True)
 
-    X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.33, shuffle=True, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.20,
+                                                        shuffle=True, random_state=321)
 
-    input = Input((2,))
+    input = Input((5,))
     l = input
-    # l = Dense(2, activation='relu')(l)
-    # l = Dense(8, activation='relu')(l)
+    l = Dense(8, activation='relu')(l)
+    l = Dense(4, activation='relu')(l)
     l = Dense(1, activation='sigmoid')(l)
 
     model = Model(inputs=input, outputs=l)
