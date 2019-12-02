@@ -3,12 +3,15 @@ import pandas
 from keras import Input, Model, metrics
 from keras.callbacks import History
 from keras.layers import Dense
+from sklearn.model_selection import train_test_split
 
 
 def log_reg(filename):
     data = pandas.read_csv(filename,
                            usecols=['max_pos', 'max_neg'])
     merged = pandas.read_csv(filename, usecols=['merged'], squeeze=True)
+
+    X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.33, shuffle=True, random_state=42)
 
     input = Input((2,))
     l = input
@@ -21,13 +24,13 @@ def log_reg(filename):
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[metrics.binary_accuracy])
 
-    hist: History = model.fit(data, merged, epochs=10, verbose=False)
+    hist: History = model.fit(X_train, y_train, epochs=10, verbose=False)
 
     plt.plot(hist.history['loss'])
     plt.plot(hist.history['binary_accuracy'])
     plt.show()
 
-    acc = model.evaluate(data, merged)[model.metrics_names.index("binary_accuracy")]
+    acc = model.evaluate(X_test, y_test)[model.metrics_names.index("binary_accuracy")]
     print("Accuracy:", acc)
 
 
