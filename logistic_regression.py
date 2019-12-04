@@ -1,15 +1,21 @@
-from sklearn.linear_model import LogisticRegression
 import pandas
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 
-def log_reg(filename, cols):
-  data = pandas.read_csv(filename, usecols=cols)
-  merged = pandas.read_csv(filename, usecols=['merged'], squeeze=True)
-  clf = LogisticRegression().fit(data, merged)
-  return clf.score(data,merged)
+def log_reg(filename, cols, use_test=True):
+    data = pandas.read_csv(filename, usecols=cols)
+    merged = pandas.read_csv(filename, usecols=['merged'], squeeze=True)
 
-def to_percent(num):
-  return str(round(num * 100, 2)) + "%"
+    X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.20,
+                                                        shuffle=True, random_state=321)
+
+    clf = LogisticRegression().fit(X_train, y_train)
+    
+    if use_test:
+        return clf.score(X_test, y_test)
+    else:
+        return clf.score(X_train, y_train)
 
 def print_table(files, columns):
   print("\n        ", end=' ')
@@ -20,12 +26,11 @@ def print_table(files, columns):
   for colpair in columns:
     print(colpair[0], '-', end=' ')
     for filepair in files:
-      print(to_percent(log_reg(filepair[1], colpair[1])), end='   \t')
+      print(round(log_reg(filepair[1], colpair[1]), 4), end='   \t')
     print()
   
 
 if __name__ == '__main__':
-
   files = [("Issues ", 'sentiment-issue2.csv'),
            ("Reviews", 'sentiment-review.csv'),
            ("Both   ", 'sentiment-both.csv')]

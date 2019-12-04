@@ -71,9 +71,18 @@ def convert(prs):
         else:
             both_has_image = False
 
-        results[ISSUE].append(TextData(pr.id, ISSUE, parsed_issue_comments, pr.merged, issue_has_code_snippet, issue_has_image))
-        results[REVIEW].append(TextData(pr.id, REVIEW, parsed_review_comments, pr.merged, review_has_code_snippet, review_has_image))
-        results[BOTH].append(TextData(pr.id, BOTH, parsed_issue_comments + parsed_review_comments, pr.merged, both_has_code_snippet, both_has_image))
+
+        for comment in pr.issue_comments:
+            comment = " ".join(comment.split('\r\n'))  # remove \r\n between comments
+            comment = re.sub(r'\r|\n', ' ', comment)  # remove remaining \r and \n
+            results[ISSUE].append(TextData(pr.id, ISSUE, comment, pr.merged, issue_has_code_snippet, issue_has_image))
+            results[BOTH].append(TextData(pr.id, BOTH, comment, pr.merged, issue_has_code_snippet, issue_has_image))
+
+        for comment in pr.review_comments:
+            comment = " ".join(comment.split('\r\n'))  # remove \r\n between comments
+            comment = re.sub(r'\r|\n', ' ', comment)  # remove remaining \r and \n
+            results[REVIEW].append(TextData(pr.id, REVIEW, comment, pr.merged, issue_has_code_snippet, issue_has_image))
+            results[BOTH].append(TextData(pr.id, BOTH, comment, pr.merged, issue_has_code_snippet, issue_has_image))
 
     return results
 
