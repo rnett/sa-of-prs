@@ -8,7 +8,8 @@ from sklearn.model_selection import train_test_split
 
 def log_reg(filename):
     data = pandas.read_csv(filename,
-                           usecols=['sum_pos', 'sum_neg', 'min_neg', 'max_pos', 'num_comments'])
+                           usecols=['sum_pos', 'sum_neg', 'min_neg', 'max_pos', 'num_comments', 'has_images',
+                                    'has_code_snippets'])
 
     data['sum_pos'] /= data['num_comments']
     data['sum_neg'] /= data['num_comments']
@@ -18,7 +19,7 @@ def log_reg(filename):
     X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.20,
                                                         shuffle=True, random_state=321)
 
-    input = Input((5,))
+    input = Input((7,))
     l = input
     l = Dense(8, activation='relu')(l)
     l = Dense(4, activation='relu')(l)
