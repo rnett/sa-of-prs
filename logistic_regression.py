@@ -5,13 +5,20 @@ from sklearn.model_selection import train_test_split
 
 def log_reg(filename, cols, use_test=True):
     data = pandas.read_csv(filename, usecols=cols)
+
+    # if 'sum_pos' in cols:
+    #     data['sum_pos'] /= data['num_comments']
+    #
+    # if 'sum_neg' in cols:
+    #     data['sum_neg'] /= data['num_comments']
+
     merged = pandas.read_csv(filename, usecols=['merged'], squeeze=True)
 
     X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.20,
                                                         shuffle=True, random_state=321)
 
-    clf = LogisticRegression().fit(X_train, y_train)
-    
+    clf = LogisticRegression(solver='lbfgs').fit(X_train, y_train)
+
     if use_test:
         return clf.score(X_test, y_test)
     else:
@@ -31,9 +38,9 @@ def print_table(files, columns):
   
 
 if __name__ == '__main__':
-  files = [("Issues ", 'sentiment-issue2.csv'),
-           ("Reviews", 'sentiment-review.csv'),
-           ("Both   ", 'sentiment-both.csv')]
+    files = [("Issues ", 'sentiment-issue.csv'),
+             ("Reviews", 'sentiment-review.csv'),
+             ("Both   ", 'sentiment-both.csv')]
 
   columns = [("All   ", ['sum_pos', 'sum_neg', 'min_neg', 'max_pos', 'num_comments', 'has_images', 'has_code_snippets']),
              ("PosNeg", ['sum_pos', 'sum_neg', 'min_neg', 'max_pos']),
