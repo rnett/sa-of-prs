@@ -17,7 +17,10 @@ def log_reg(filename, cols, use_test=True):
     X_train, X_test, y_train, y_test = train_test_split(data, merged, test_size=0.20,
                                                         shuffle=True, random_state=321)
 
-    clf = LogisticRegression(solver='lbfgs').fit(X_train, y_train)
+    clf = LogisticRegression(solver='lbfgs')  # SVC()
+    clf.fit(X_train, y_train)
+
+    # print("Avg:", np.mean(clf.predict(X_test)))
 
     if use_test:
         return clf.score(X_test, y_test)
