@@ -10,7 +10,9 @@ This is where we generate our dataset of 10k pull requests and their comments.
 
 ### Sentiment Analysis
 
-TODO (Brian)
+1. run python3 convert.py
+2. run SentiStrength-SE_V1.5.jar
+3. 
 
 ### Analysis
 
@@ -21,4 +23,5 @@ Our model fitting is done in `logistic_regression.py`.
 
 `sentiment-both.csv`, `sentiment-issue.csv`, and `sentiment-review.csv` are data files for use in analysis.
 They contain features for issues and code review comments, just issues, and just code review comments, respectively.
+
 

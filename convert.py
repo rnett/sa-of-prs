@@ -14,10 +14,10 @@ if __name__ == '__main__':
 
     parsed_data = convert_funcs.convert(prs)
 
-    output_data("input-se-issues", parsed_data[convert_funcs.ISSUE])
-    output_data("input-se-review", parsed_data[convert_funcs.REVIEW])
-    output_data("input-se-both", parsed_data[convert_funcs.BOTH])
+    output_data("data/input-se-issues.txt", parsed_data[convert_funcs.ISSUE])
+    output_data("data/input-se-review.txt", parsed_data[convert_funcs.REVIEW])
+    output_data("data/input-se-both.txt", parsed_data[convert_funcs.BOTH])
 
-    parsed_data_file = open("parsed_data", 'wb+')
+    parsed_data_file = open("data/parsed_data", 'wb+')
     pickle.dump(parsed_data, parsed_data_file)
 
