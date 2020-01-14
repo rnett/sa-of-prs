@@ -10,17 +10,14 @@ def output_data(filename, data):
                 issue_data.text + '\n')
 
 if __name__ == '__main__':
-    pickled_data = data.PR.load_all() # load all
+    prs = data.PR.load_all() # load all
 
-    if len(pickled_data) > 0:
-        prs = pickled_data[0]
+    parsed_data = convert_funcs.convert(prs)
 
-        parsed_data = convert_funcs.convert(prs)
+    output_data("input-se-issues", parsed_data[convert_funcs.ISSUE])
+    output_data("input-se-review", parsed_data[convert_funcs.REVIEW])
+    output_data("input-se-both", parsed_data[convert_funcs.BOTH])
 
-        output_data("input-se-issues", parsed_data[convert_funcs.ISSUE])
-        output_data("input-se-review", parsed_data[convert_funcs.REVIEW])
-        output_data("input-se-both", parsed_data[convert_funcs.BOTH])
-
-        parsed_data_file = open("parsed_data", 'wb+')
-        pickle.dump(parsed_data, parsed_data_file)
+    parsed_data_file = open("parsed_data", 'wb+')
+    pickle.dump(parsed_data, parsed_data_file)
 

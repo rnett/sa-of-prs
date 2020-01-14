@@ -16,22 +16,21 @@ else:
 
 if user == 'jimne' or user == 'rnett':
     data_dir = Path("E:\\508")
+    data_file = data_dir / "review_comments.csv.xz"
 elif user == 'JNett':
     data_dir = Path(
         "C:\\Users\\JNett\\Common\\Desktop\\Other "
         "Stuff\\508")
+    data_file = data_dir / "review_comments.csv.xz"
 elif user == 'brianishii':
     data_dir = Path(
         "/Users/brianishii/Documents/Cal_Poly/classes/senior/fall/csc508/")
+    data_file = data_dir / "review_comments.csv.xz"
 else:
-    raise ValueError(f"User {user} not recognized.  Add to the data.py file.")
+    pass #raise ValueError(f"User {user} not recognized.  Add to the data.py file.")
 
-data_file = data_dir / "review_comments.csv.xz"
 
-prs_file = data_dir / "prs.pickle.gz"
-prs_dir = data_dir / "prs"
-
-prs_obj_file = data_dir / "prs_objects.pickle.gz"
+prs_obj_file = Path("prs_objects.pickle.gz")
 # result should be iterable
 def load():
     archf = lzma.open(data_file)
@@ -90,18 +89,9 @@ class PR:
         return hash(self.id)
 
     @staticmethod
-    def load(id: str):
-        file = prs_dir / (id + ".pickle.gz")
-        return pickle.load(gzip.open(file, 'rb', 9))
-
-    @staticmethod
     def load_all():
-        l = []
-        for f in prs_dir.iterdir():
-            if f.name.endswith(".pickle.gz"):
-                l.append(pickle.load(gzip.open(f, 'rb', 9)))
-
-        return l
+        with gzip.open('prs_objects.pickle.gz') as f:
+            return pickle.load(f)
 
     @staticmethod
     def repo_and_num_from_api_url(api_url: str) -> Tuple[str, int]:
@@ -127,14 +117,6 @@ class PR:
 
         pr = PR(repo, pr_number, merged, issue_comments, review_comments)
         return pr
-
-    def save(self, force: bool = False):
-        file = prs_dir / (self.id + ".pickle.gz")
-
-        if not force and file.exists():
-            raise ValueError(f"File for id {self.id} already exists: {file}")
-
-        pickle.dump(self, gzip.open(file, 'wb+', 9))
 
     @property
     def api_url(self) -> str:
