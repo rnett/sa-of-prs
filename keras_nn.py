@@ -6,7 +6,7 @@ from keras.layers import Dense
 from sklearn.model_selection import train_test_split
 
 
-def log_reg(filename):
+def model(filename):
     data = pandas.read_csv(filename,
                            usecols=['sum_pos', 'sum_neg', 'min_neg', 'max_pos', 'num_comments', 'has_images',
                                     'has_code_snippets'])
@@ -41,6 +41,6 @@ def log_reg(filename):
 
 
 if __name__ == '__main__':
-    log_reg('sentiment-issue.csv')
-    log_reg('sentiment-review.csv')
-    log_reg('sentiment-both.csv')
+    model('sentiment-issue.csv')
+    model('sentiment-review.csv')
+    model('sentiment-both.csv')
