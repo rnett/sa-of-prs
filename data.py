@@ -15,8 +15,12 @@ else:
     user = str(Path("~").expanduser()).split("/")[-1]
 
 if user == 'jimne' or user == 'rnett':
-    data_dir = Path("E:\\508")
-    data_file = data_dir / "review_comments.csv.xz"
+    if platform.system() == "Windows":
+        data_dir = Path("E:\\508")
+        data_file = data_dir / "review_comments.csv.xz"
+    else:
+        data_dir = Path("/data/508")
+        data_file = data_dir / "review_comments.csv.xz"
 elif user == 'JNett':
     data_dir = Path(
         "C:\\Users\\JNett\\Common\\Desktop\\Other "
