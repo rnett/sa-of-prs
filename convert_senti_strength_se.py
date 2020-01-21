@@ -29,9 +29,8 @@ class Sentiment:
 if __name__ == '__main__':
     file = open("data/parsed_data", 'rb')
     parsed_data = pickle.load(file)
-    print(parsed_data)
-
-    types = ["issues", "review", "both"]
+    file.close()
+    types = ["both", "issue"]
 
     for type in types:
         sentiment_file = "data/se-" + type
@@ -42,8 +41,7 @@ if __name__ == '__main__':
         prs = {}
 
         for data in parsed_data[type]:
-            prs[data.id] = (data, Sentiment())
-
+            prs[str(data.id)] = (data, Sentiment())
 
         for line in input:
             temp = re.sub(r' \t| ', ',', line)

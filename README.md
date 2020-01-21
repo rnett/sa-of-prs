@@ -10,9 +10,17 @@ This is where we generate our dataset of 10k pull requests and their comments.
 
 ### Sentiment Analysis
 
-1. run python3 convert.py
-2. run SentiStrength-SE_V1.5.jar
-3. 
+1. run `python3 convert.py`
+2. run `java -jar SentiStrength-SE_V1.5.jar`
+3. Detect sentiments for each data file <br />
+    a. `data/input-se-both.txt` <br />
+    b. `data/input-se-issues.txt` <br />
+    c. `data/input-se-review.txt` <br />
+4. Save the outputs the the following files: <br />
+    a. `data/se-both.txt` <br />
+    b. `data/se-issue` <br />
+    c. `data/se-review` <br />
+5. run `python3 convert_senti-strength-se.py`
 
 ### Analysis
 
